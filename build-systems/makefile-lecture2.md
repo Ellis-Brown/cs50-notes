@@ -1,6 +1,7 @@
 # Makefiles
-
 All things in this lesson are using GNU make
+
+Note: these notes were a live recording of a lecture. The offical notes released for this class can be found [here](https://bernsteinbear.com/isdt/lecture-notes/3-bld/#lecture-2). 
 
 
 ## Make
