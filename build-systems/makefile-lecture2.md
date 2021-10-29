@@ -63,3 +63,29 @@ Example usage:
 
 1. Every single file is built every single time in a shell script, such as intermediate files. Especially when optimized, this can waste a lot of time. Makefiles on the other hand can have intermediate files that were not modiefied not get built at the same time.
 
+## Example makefile
+Uses the tools learned in this lesson.
+```
+say-hello
+    @echo "World
+    @echo "hello"
+
+
+silent-gcc
+    @gcc *.c -o somecoolname
+    
+non-silent-gcc
+    gcc *.c -o someOtherName
+
+
+with-no-dependencies:
+    gcc myprogram.c -o myprogram
+
+
+with-dependencies: mypprogram.c myprogram.h
+    gcc mypprogram.c -o myprogram
+
+
+clean: 
+    rm myprogram -rf *.o
+```
