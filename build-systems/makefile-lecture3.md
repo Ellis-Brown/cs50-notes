@@ -155,13 +155,18 @@ bar := $(subst $(space), $(comma), $(x))
 > Note: you do not need to always use make functions and variables. Sometimes using them is more complicated than it should be. Use recipes, not shell commands or other commands when possible. Dont use `$(shell gcc main.c -c)` or something like that, that is just turning the makefile into a glorified shell script...
 #
 
-## Macros and tages of evaluation
+## Macros and stages of evaluation
+When building using a makefile, there are two diustinct phases: "read-in" phase, and  "target-update" phase:
 
-There are two diustinct phases: "read-in" phase, and  "target-update" phase:
+However, it is worth noting that knowing the explicit details of this are not necessary to use a makefile (i think)
 
-(Notes for this were missed)
-
-#
+- **Read-in phase** 
+    - Reads all makefiles, including included makefiles
+    - Internalizes all variables and their values and implicit and explcit rules
+    - Builds a dependency graph of targets and prerequesites
+- **Target-update phase**
+    - Determines which targets needs to be updated
+    - Run receipes necessary to update targets
 
 ## Pattern rules
 
