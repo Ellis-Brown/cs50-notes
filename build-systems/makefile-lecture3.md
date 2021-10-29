@@ -86,7 +86,7 @@ CFLAGS := $(CFLAGS) -Werror   # Able to append a second term
 
 main: main.o log.o
     $(LOG_TARGET)
-    gcc $(CFLAGS) $^ -o $@    # Grab all prerequesites, and name the rule9
+    gcc $(CFLAGS) $^ -o $@    # Grab all prerequesites, and name the rule
 
 main.o: main.c log.h
     $(LOG_TARGET)
@@ -100,9 +100,9 @@ log.o: log.c log.h
 ### Example of an infinite recursion program:
 ```
 Hello = Hello             # variable declaration
-Hello = $(Hello) two      # varaible appends self, recursively
+Hello = $(Hello) two      # variable appends self, recursively
 sayhello:
-	$(Hello)              # referencing variable is an error
+	$(Hello)              # viewing varriable is an error
 	@echo "hello"
 ```
 
@@ -120,13 +120,12 @@ Functions are basically varaibles that take arguments and can substitute those a
 
 - The replacement happens before the shell sees the variables. 
 
- `word` , takes a posistion in a list of words, and a list of words
+`word`, takes a posistion in a list of words, and a list of words
 ```
 print-c:
     echo "hello $(word 2, b c a)" 
 ```
 > hello c
-
 
 `subst` : takes a search term, and a replacement term
 ```
@@ -134,6 +133,7 @@ print-with-replacement:
     echo $(subst needle, replacement, hello needle)
 ```
 > hello needle
+
 
 Make variables and functions are textual
 
@@ -168,6 +168,8 @@ However, it is worth noting that knowing the explicit details of this are not ne
     - Determines which targets needs to be updated
     - Run receipes necessary to update targets
 
+# 
+
 ## Pattern rules
 
 The following will match `make (string).o` to using the dependencies of `(string).c` and `string.h`
@@ -176,7 +178,7 @@ The following will match `make (string).o` to using the dependencies of `(string
 
 ```
 %.o: %.c %.h:
-    gcc $< -c -o $@
+    gcc $< -c -o $@ 
 ```
 
 Demo that writes the name of a text file to the end of the text file 
