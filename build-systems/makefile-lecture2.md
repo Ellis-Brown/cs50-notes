@@ -16,25 +16,25 @@ When you run make, it expects a file called "Makefile"
         Files that the rule depends on. If any prequesite is newer than the target, the recipe runs. If a pre-requesite has its own rule, Make will run that rule first if necessary. Its up to you to get this right
     - Recipe
     
-        A list of shell commands to run to generate the target. Each lune runs in its own shell, so cd and setting shell variables wont persist across multiple lines.
+        A list of shell commands to run to generate the target. Each line runs in its own shell, so cd and setting shell variables won't persist across multiple lines.
         You can have as many lines as you want in a recipie.
 
-2. ### Variable defintions
+2. ### Variable definitions
 
 3. ### Special targets
 
-> Note: A make rule will stop if an of the shell commands in the recipie end with a non-zero exit code.
+> Note: A make rule will stop if an of the shell commands in the recipe end with a non-zero exit code.
 ## Special flags
 > -s : silent mode
-> preface a command with the @ sign, and it only prints the output of the recipie 
+> preface a command with the @ sign, and it only prints the output of the recipe 
 
 ## Benefits of a build system
 ### Consistency
-- One simple command runs arbitrary comlpex build rules
-- Build happens identically for everyone working opn the project
+- One simple command runs arbitrary complex build rules
+- Build happens identically for everyone working on the project
 - Rules can be developed alongside code, tracked in version control.
 ### Efficiency
-- Build is split up into multiple _rules_, whuch transforms inputs into outputs.
+- Build is split up into multiple _rules_, which transforms inputs into outputs.
 - Each rule only needs to run if its inputs have changed.
 - Build system figures out the minimal set of rules that need to run.
 
@@ -51,22 +51,23 @@ By default, typing `make` builds the first target in the file.
 
 ## .PHONY targets
 
-A phony target is one that is not really hr name of a file, rather it is just the name for a recipe to be executed when you make an explcit request. There are two reasons to use a phony target: to avoid a conflict with a file with the same name, and to improve performance. 
+A phony target is one that is not really hr name of a file, rather it is just the name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file with the same name, and to improve performance. 
 If you write a rule whose recipe will not create the rarget file, the recipie will not be executed every time the target comes up for remaking.
 
-Reason to use a phony file : You have a rule that doesnt build anything, and it may be possible to have a file with that file name.
+Reason to use a phony file : You have a rule that doesn't build anything, and it may be possible to have a file with that file name.
 
 Example usage:
+```cmake=
+	.PHONY: name-of-rule
+```
 
-        .PHONY: name-of-rule
+## Comparing a shell script vs. Makefile
 
-## Comparing a shell scrip vs. Makefile
-
-1. Every single file is built every single time in a shell script, such as intermediate files. Especially when optimized, this can waste a lot of time. Makefiles on the other hand can have intermediate files that were not modiefied not get built at the same time.
+1. Every single file is built every single time in a shell script, such as intermediate files. Especially when optimized, this can waste a lot of time. Makefiles on the other hand can have intermediate files that were not modified and not get built at the same time.
 
 ## Example makefile
 Uses the tools learned in this lesson.
-```
+```cmake=
 say-hello
     @echo "World
     @echo "hello"
