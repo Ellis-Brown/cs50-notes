@@ -16,51 +16,54 @@ Its not quite like a shell script:
     - Interprets the character `$` as a Make variable substitution. (Use `$$` for a literal)
     - Allow _line continuations_ by including a backslash ( `\` ) at the end of a line.
 
-The standard shell quoting rules apply. Use quotes whenever an argument might have spaces, even if its a make variable
+The standard shell quoting rules apply. Use quotes whenever an argument might have spaces, even if it's a make variable
 
 Here is an example of accessing the shell script variable `$USER`
-    
-    myname: 
-        echo "$$USER" > myname 
+```cmake= 
+myname: 
+	echo "$$USER" > myname 
+```
 
 Here is an example that FAILS.  This is because the 2 lines run in their own shell
-
-    cat-passwd:
-        cd /etc/
-        cat passwd
+```cmake=
+cat-passwd:
+	cd /etc/
+	cat passwd
+```
 #
 ## Variables in make
 
-Two types of variable assignment, each  of which appear on a line of their own:
+Two types of variable assignment, each of which appear on a line of their own:
 - **Simply Expanded**: `NAME := val`
-    - variable references and function calls in val happen _when_ the varaible is _defined_
+    - Variable references and function calls in val happen _when_ the varaible is _defined_
     - Works like assignments in nearly every other language
     - When in doubt, use these.
     - Unlike the shell, it is okay to add spaces before/after the equals
 
 - **Recursively expanded**: `NAME = val`
-    - variable references and function calls in `val` happen when the variable is _USED_.
-    - Allows complex templates to be stored in a vartiable and used with many different values
-    - Can lead to infinite recursion if you're not carteful.
+    - Variable references and function calls in `val` happen when the variable is _USED_.
+    - Allows complex templates to be stored in a variable and used with many different values
+    - Can lead to infinite recursion if you're not careful.
 
 Expansions can occur anywhere, and use `$(VAR)` syntax to access.
 
 Example: 
+```cmake=
+EXE := main     # define the variable here, using simply expanded syntax
 
-    EXE := main     # define the variable here, using simply expanded syntax
+$(EXE): main.o log.o
+	gcc main.o log.o -o $(EXE)
 
-    $(EXE): main.o log.o
-        gcc main.o log.o -o $(EXE)
+.PHONY: clean    # Makes sure the rule clean is called.
+clean:
+	rm -rf *.o $(EXE)
+	
+main.o: main.c log.h
+	gcc -c main.c
 
-    .PHONY: clean    # Makes sure the rule clean is called.
-    clean:
-        rm -rf *.o $(EXE)
-        
-    main.o: main.c log.h
-        gcc -c main.c
-
-    log.o: log.c log.h
-        gcc -c log.c
+log.o: log.c log.h
+	gcc -c log.c
+```
 
 ### Automatic variables
 
@@ -76,7 +79,7 @@ Prevent you from typing the same filenames multiple times in a rule. A few commo
 
 ### Demo: Simple versus recursive expansion, using automatic variables 
 
-```
+```cmake=
 # Makefile
 
 LOG_TARGET = @echo "Current target: $@" ; echo "Prerequiesites: $^"
@@ -98,7 +101,7 @@ log.o: log.c log.h
 ```
 
 ### Example of an infinite recursion program:
-```
+```cmake=
 Hello = Hello             # variable declaration
 Hello = $(Hello) two      # variable appends self, recursively
 sayhello:
@@ -114,33 +117,33 @@ Raises the following error message:
 
 ## Functions
 
-Functions are basically varaibles that take arguments and can substitute those argumenbts in their values. Lots of built-in functions, like word.
+Functions are basically varaibles that take arguments and can substitute those argumenbts in their values. Lots of built-in functions, like `word`.
 
-- Functions can accept any number of parameters, seperated by arguments.
+- Functions can accept any number of parameters, separated by arguments.
 
 - The replacement happens before the shell sees the variables. 
 
-`word`, takes a posistion in a list of words, and a list of words
-```
+`word`, takes a position in a list of words, and a list of words
+```cmake=
 print-c:
     echo "hello $(word 2, b c a)" 
 ```
 > hello c
 
 `subst` : takes a search term, and a replacement term
-```
+```cmake=
 print-with-replacement:
     echo $(subst needle, replacement, hello needle)
 ```
 > hello needle
 
 
-Make variables and functions are textual
+Make variables and functions are textual.
 
 Like the shell, Make has no concept of data types. Everything is text, and Make's minimal escaping and tolerance for spaces can lead to some pretty odd constructs. Here is a code snippet from the GNU Make manual, which helps solve the characters of `space` and `comma` being read in function parameters incorrectly. 
 
 How could we specify they are function parameters, if we need to seperate using commas and spaces?
-```
+```cmake=
 # The problem we are solving is the literals are being interpreted
 
 comma := ,                   # comma var, used as func param
@@ -156,7 +159,7 @@ bar := $(subst $(space), $(comma), $(x))
 #
 
 ## Macros and stages of evaluation
-When building using a makefile, there are two diustinct phases: "read-in" phase, and  "target-update" phase:
+When building using a makefile, there are two distinct phases: "read-in" phase, and  "target-update" phase:
 
 However, it is worth noting that knowing the explicit details of this are not necessary to use a makefile (i think)
 
@@ -176,13 +179,13 @@ The following will match `make (string).o` to using the dependencies of `(string
 
 `%.o: %.c %.h` : Add the missing header dependency to the implict rule. You have to use automatic variables, since we dont know the exact filenames.
 
-```
+```cmake=
 %.o: %.c %.h:
     gcc $< -c -o $@ 
 ```
 
 Demo that writes the name of a text file to the end of the text file 
-```
+```cmake=
 %.txt:
     echo "Hello I am $@" >> $@
 ```
