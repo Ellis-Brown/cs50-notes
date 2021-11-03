@@ -228,4 +228,3 @@ Recursive Make is a good fit for projects written entirely in C:
 From the "Linux Kernel Makefiles" documentation:
 
 - "A makefile is only responsible for building objects in its own directory. Files in subdirectories should be taken care of by Makefiles in these subdirs. The build system will automatically invoke make recursively in sbudirectories, provided you let it know of them."
---- 

@@ -57,7 +57,7 @@ If you write a rule whose recipe will not create the rarget file, the recipie wi
 Reason to use a phony file : You have a rule that doesn't build anything, and it may be possible to have a file with that file name.
 
 Example usage:
-```cmake=
+```make
 	.PHONY: name-of-rule
 ```
 
@@ -67,7 +67,7 @@ Example usage:
 
 ## Example makefile
 Uses the tools learned in this lesson.
-```cmake=
+```make
 say-hello
     @echo "World
     @echo "hello"
