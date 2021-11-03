@@ -19,13 +19,13 @@ Its not quite like a shell script:
 The standard shell quoting rules apply. Use quotes whenever an argument might have spaces, even if it's a make variable
 
 Here is an example of accessing the shell script variable `$USER`
-```cmake= 
+```make= 
 myname: 
 	echo "$$USER" > myname 
 ```
 
 Here is an example that FAILS.  This is because the 2 lines run in their own shell
-```cmake=
+```make=
 cat-passwd:
 	cd /etc/
 	cat passwd
@@ -48,7 +48,7 @@ Two types of variable assignment, each of which appear on a line of their own:
 Expansions can occur anywhere, and use `$(VAR)` syntax to access.
 
 Example: 
-```cmake=
+```make=
 EXE := main     # define the variable here, using simply expanded syntax
 
 $(EXE): main.o log.o
@@ -79,7 +79,7 @@ Prevent you from typing the same filenames multiple times in a rule. A few commo
 
 ### Demo: Simple versus recursive expansion, using automatic variables 
 
-```cmake=
+```make=
 # Makefile
 
 LOG_TARGET = @echo "Current target: $@" ; echo "Prerequiesites: $^"
@@ -101,7 +101,7 @@ log.o: log.c log.h
 ```
 
 ### Example of an infinite recursion program:
-```cmake=
+```make=
 Hello = Hello             # variable declaration
 Hello = $(Hello) two      # variable appends self, recursively
 sayhello:
@@ -124,14 +124,14 @@ Functions are basically varaibles that take arguments and can substitute those a
 - The replacement happens before the shell sees the variables. 
 
 `word`, takes a position in a list of words, and a list of words
-```cmake=
+```make=
 print-c:
     echo "hello $(word 2, b c a)" 
 ```
 > hello c
 
 `subst` : takes a search term, and a replacement term
-```cmake=
+```make=
 print-with-replacement:
     echo $(subst needle, replacement, hello needle)
 ```
@@ -143,7 +143,7 @@ Make variables and functions are textual.
 Like the shell, Make has no concept of data types. Everything is text, and Make's minimal escaping and tolerance for spaces can lead to some pretty odd constructs. Here is a code snippet from the GNU Make manual, which helps solve the characters of `space` and `comma` being read in function parameters incorrectly. 
 
 How could we specify they are function parameters, if we need to seperate using commas and spaces?
-```cmake=
+```make=
 # The problem we are solving is the literals are being interpreted
 
 comma := ,                   # comma var, used as func param
@@ -179,13 +179,13 @@ The following will match `make (string).o` to using the dependencies of `(string
 
 `%.o: %.c %.h` : Add the missing header dependency to the implict rule. You have to use automatic variables, since we dont know the exact filenames.
 
-```cmake=
+```make=
 %.o: %.c %.h:
     gcc $< -c -o $@ 
 ```
 
 Demo that writes the name of a text file to the end of the text file 
-```cmake=
+```make=
 %.txt:
     echo "Hello I am $@" >> $@
 ```
