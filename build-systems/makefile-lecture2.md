@@ -58,7 +58,7 @@ Reason to use a phony file : You have a rule that doesn't build anything, and it
 
 Example usage:
 ```make
-	.PHONY: name-of-rule
+.PHONY: name-of-rule
 ```
 
 ## Comparing a shell script vs. Makefile
