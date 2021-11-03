@@ -68,15 +68,15 @@ Example usage:
 ## Example makefile
 Uses the tools learned in this lesson.
 ```make
-say-hello
+say-hello:
     @echo "World
     @echo "hello"
 
 
-silent-gcc
+silent-gcc:
     @gcc *.c -o somecoolname
     
-non-silent-gcc
+non-silent-gcc:
     gcc *.c -o someOtherName
 
 
